@@ -1,11 +1,11 @@
 <?php
 
 require_once 'TestMaster.php';
-require_once "../src/TennisGame1.php";
+require_once "src/TennisGame1.php";
 
 /**
  * TennisGame1 test case.
- */
+ */
 class TennisGame1Test extends TestMaster
 {
 	/**

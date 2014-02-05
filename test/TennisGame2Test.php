@@ -1,7 +1,7 @@
 <?php
 
 require_once 'TestMaster.php';
-require_once "../src/TennisGame2.php";
+require_once "src/TennisGame2.php";
 
 /**
  * TennisGame1 test case.
