@@ -7,8 +7,6 @@ class TennisGame2 implements TennisGame
 	private $P1point = 0;
 	private $P2point = 0;
 
-	private $P1res = "";
-	private $P2res = "";
 	private $player1Name = "";
 	private $player2Name = "";
 
@@ -20,98 +18,38 @@ class TennisGame2 implements TennisGame
 
 	public function getScore()
 	{
-		$score = "";
-		if ($this->P1point == $this->P2point && $this->P1point < 4) {
-			if ($this->P1point==0)
-				$score = "Love";
-			if ($this->P1point==1)
-				$score = "Fifteen";
-			if ($this->P1point==2)
-				$score = "Thirty";
-			$score .= "-All";
-		}
+
+		if ($this->P1point >= 4 && ($this->P1point - $this->P2point) >= 2)
+			return "Win for player1";
+
+		if ($this->P2point >= 4 && ($this->P2point - $this->P1point) >= 2)
+			return "Win for player2";
+
+		if ($this->P1point > $this->P2point && $this->P2point >= 3)
+			return "Advantage player1";
+
+		if ($this->P2point > $this->P1point && $this->P1point >= 3)
+			return "Advantage player2";
 
 		if ($this->P1point == $this->P2point && $this->P1point >= 3)
-			$score = "Deuce";
+			return "Deuce";
 
-		if ($this->P1point > 0 && $this->P2point == 0) {
-			if ($this->P1point == 1)
-				$this->P1res = "Fifteen";
-			if ($this->P1point == 2)
-				$this->P1res = "Thirty";
-			if ($this->P1point == 3)
-				$this->P1res = "Forty";
+		if ($this->P1point == $this->P2point && $this->P1point < 4)
+			return $this->pointToString($this->P1point) . "-All";
 
-			$this->P2res = "Love";
-			$score = "{$this->P1res}-{$this->P2res}";
-		}
-
-		if ($this->P2point > 0 && $this->P1point == 0) {
-			if ($this->P2point == 1)
-				$this->P2res = "Fifteen";
-			if ($this->P2point == 2)
-				$this->P2res = "Thirty";
-			if ($this->P2point == 3)
-				$this->P2res = "Forty";
-			$this->P1res = "Love";
-			$score = "{$this->P1res}-{$this->P2res}";
-		}
-
-		if ($this->P1point > $this->P2point && $this->P1point < 4) {
-			if ($this->P1point == 2)
-				$this->P1res = "Thirty";
-			if ($this->P1point == 3)
-				$this->P1res = "Forty";
-			if ($this->P2point == 1)
-				$this->P2res = "Fifteen";
-			if ($this->P2point == 2)
-				$this->P2res = "Thirty";
-			$score = "{$this->P1res}-{$this->P2res}";
-		}
-
-		if ($this->P2point > $this->P1point && $this->P2point < 4) {
-			if ($this->P2point == 2)
-				$this->P2res = "Thirty";
-			if ($this->P2point == 3)
-				$this->P2res = "Forty";
-			if ($this->P1point == 1)
-				$this->P1res = "Fifteen";
-			if ($this->P1point == 2)
-				$this->P1res = "Thirty";
-			$score = "{$this->P1res}-{$this->P2res}";
-		}
-
-		if ($this->P1point > $this->P2point && $this->P2point >= 3) {
-			$score = "Advantage player1";
-		}
-
-		if ($this->P2point > $this->P1point && $this->P1point >= 3) {
-			$score = "Advantage player2";
-		}
-
-		if ($this->P1point >= 4 && $this->P2point >= 0 && ($this->P1point - $this->P2point) >= 2) {
-			$score = "Win for player1";
-		}
-
-		if ($this->P2point >= 4 && $this->P1point >= 0 && ($this->P2point - $this->P1point) >= 2) {
-			$score = "Win for player2";
-		}
-
-		return $score;
-	}
-
-	private function SetP1Score($number)
-	{
-		for ($i = 0; $i < $number; $i++) {
-			$this->P1Score();
-		}
+		return $this->pointToString($this->P1point) . '-'. $this->pointToString($this->P2point);
 
 	}
 
-	private function SetP2Score($number)
+	private function pointToString($point)
 	{
-		for ($i = 0; $i < $number; $i++) {
-			$this->P2Score();
+		switch($point)
+		{
+			case 0: return "Love";
+			case 1: return "Fifteen";
+			case 2: return "Thirty";
+			case 3: return "Forty";
+			default: throw new Exception("Cannot exec point to string for point '$point'");
 		}
 	}
 
@@ -127,9 +65,11 @@ class TennisGame2 implements TennisGame
 
 	public function wonPoint($player)
 	{
-		if ($player == "player1")
+		if ($player == $this->player1Name) {
 			$this->P1Score();
-		else
-			$this->P2Score();
+			return;
+		}
+
+		$this->P2Score();
 	}
 }
